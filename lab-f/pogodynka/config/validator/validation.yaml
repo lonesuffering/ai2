@@ -1,0 +1,33 @@
+App\Entity\Location:
+    properties:
+        city:
+            - NotBlank: { groups: [new, edit] }
+            - Length: { min: 2, max: 100, groups: [new, edit] }
+        country:
+            - NotBlank: { groups: [new] }
+        latitude:
+            - Range: { min: -90, max: 90, groups: [new, edit] }
+        longitude:
+            - Range: { min: -180, max: 180, groups: [new, edit] }
+App\Entity\Measurement:
+        properties:
+            location:
+                -   NotNull: { groups: [ new, edit ] }
+            date:
+                -   NotNull: { groups: [ new, edit ] }
+                -   LessThanOrEqual:
+                        value: 'today'
+                        message: 'Data pomiaru nie może być z przyszłości.'
+                        groups: [ new ]
+            celsius:
+                -   NotNull: { groups: [ new, edit ] }
+                -   Range:
+                        min: -90
+                        max: 60
+                        notInRangeMessage: 'Temperatura musi być w zakresie od {{ min }} do {{ max }} °C.'
+                        groups: [ new ]
+                -   Range:
+                        min: -50
+                        max: 50
+                        notInRangeMessage: 'Przy edycji temperatura musi być od {{ min }} do {{ max }} °C.'
+                        groups: [ edit ]
