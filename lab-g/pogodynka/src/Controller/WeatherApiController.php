@@ -23,11 +23,14 @@ final class WeatherApiController extends AbstractController
 
         if ($format === 'csv') {
             if ($twig) {
-                return $this->render('weather_api/index.csv.twig', [
+                $response = $this->render('weather_api/index.csv.twig', [
                     'city' => $city,
                     'country' => $country,
                     'measurements' => $measurements,
                 ]);
+                $response->headers->set('Content-Type', 'text/plain');
+
+                return $response;
             }
 
             $csv = "city,country,date,celsius,fahrenheit\n";
@@ -49,11 +52,14 @@ final class WeatherApiController extends AbstractController
         }
 
         if ($twig) {
-            return $this->render('weather_api/index.json.twig', [
+            $response = $this->render('weather_api/index.json.twig', [
                 'city' => $city,
                 'country' => $country,
                 'measurements' => $measurements,
             ]);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
         }
 
         return $this->json([
